@@ -27,7 +27,7 @@ class CRideModel(models.Model):
     class Meta:
         """Meta option."""
         #does not show in db
-        abstract = True
+        abstract = True 
 
         get_latest_by = 'created'
         ordering = ['-created', '-modified']
