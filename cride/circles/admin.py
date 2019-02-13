@@ -15,7 +15,7 @@ class CircleAdmin(admin.ModelAdmin):
         'is_public',
         'verified',
         'is_limited',
-        'member_list'
+        'members_limit'
     )
     search_fields=('slug_name','name')
     list_filter=(

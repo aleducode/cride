@@ -39,7 +39,7 @@ class Circle(CRideModel):
         default=0,
         help_text='limited circles can grow up to a fixed number of members'
     )
-    member_list = models.PositiveIntegerField(
+    members_limit = models.PositiveIntegerField(
         default=0,
         help_text='If circle is limited, this will be the limit of the number of members'
 
@@ -52,3 +52,5 @@ class Circle(CRideModel):
     #override class meta from Cridemodel
     class Meta(CRideModel.Meta):
         ordering =['-rides_taken','-rides_offered']
+    
+    
