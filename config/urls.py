@@ -11,4 +11,3 @@ urlpatterns = [
     path('', include(('cride.circles.urls','circles'),namespace='circle'))
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
