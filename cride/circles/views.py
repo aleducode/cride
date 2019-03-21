@@ -7,7 +7,9 @@ from rest_framework.response import Response
 #models
 from cride.circles.models import Circle
 #serializers
-from cride.circles.serializers import CircleSerializer
+from cride.circles.serializers import (
+    CircleSerializer,
+    CreateCircleSerializer)
 
 import csv
 
@@ -31,18 +33,7 @@ def list_circles(request):
 @api_view(['POST'])
 def create_circle(request):
     """Create circle"""
-    name=request.data['name']
-    slug_name=request.data['slug_name']
-    #no required field
-    about=request.data.get('about','')
-    circle=Circle.objects.create(name=name,slug_name=slug_name,about=about)
-    data={
-            'name':circle.name,
-            'slug_name':circle.slug_name,
-            'about':circle.about,
-            'rides_taken':circle.rides_taken,
-            'rides_offered':circle.rides_offered,
-            'members_limit':circle.members_limit,
-         
-        }
-    return Response(data)
+    serializer=CreateCircleSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    circle=serializer.save()
+    return Response(CircleSerializer(circle).data)
