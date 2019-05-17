@@ -280,3 +280,4 @@ cride/media/
 
 circles.csv
 celerybeat.pid
+dump.rdb

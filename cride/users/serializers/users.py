@@ -152,4 +152,3 @@ class AccountVerificationSerializer(serializers.Serializer):
         user = User.objects.get(username=payload['user'])
         user.is_verified = True
         user.save()
-
