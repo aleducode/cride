@@ -2,6 +2,10 @@
 
 # Django
 from django.contrib.auth import password_validation, authenticate
+from django.utils import timezone
+from django.template.loader import render_to_string
+from django.conf import settings
+from django.core.mail import EmailMultiAlternatives
 # Django Rest Framework
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
@@ -9,6 +13,9 @@ from django.core.validators import RegexValidator
 from rest_framework.authtoken.models import Token
 # Model
 from cride.users.models import User, Profile
+# Utilities
+from datetime import timedelta
+import jwt
 
 
 class UserModelSerializaer(serializers.ModelSerializer):
@@ -68,7 +75,32 @@ class UserSignUpSerializer(serializers.Serializer):
         data.pop('password_confirmation')
         user = User.objects.create_user(**data, is_verified=False)
         profile = Profile.objects.create(user=user)
+        self.send_confirmation_email(user)
         return user
+
+    def send_confirmation_email(self, user):
+        """Send verification link to given user"""
+        verification_token = self.gen_verification_token(user)
+        subject = 'Welcome @{}! Verify your account to start using comparte Ride.'.format(user.username)
+        from_email = 'Comparte Ride <noreply@comparteride.com>'
+        content = render_to_string(
+            'email/users/account_verification.html',
+            {'token': verification_token, 'user': user})
+        msg = EmailMultiAlternatives(subject, content, from_email, [user.email])
+        msg.attach_alternative(content, "text/html")
+        msg.send()
+
+    def gen_verification_token(self, user):
+        """Create JWT token that the user can use to verify its account"""
+        expiration_date = timezone.now() + timedelta(days=3)
+        payload = {
+            'user': user.username,
+            # UTC format
+            'exp': int(expiration_date.timestamp()),
+            'type': 'email_confirmation'
+        }
+        token = jwt.encode(payload, settings.SECRET_KEY, algorithm='HS256')
+        return token.decode()
 
 
 class UserLoginSerializer(serializers.Serializer):

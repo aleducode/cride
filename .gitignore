@@ -275,7 +275,8 @@ cride/media/
 
 .ipython/
 .env
-.envs/*
+.envs/
 !.envs/.local/
 
 circles.csv
+celerybeat.pid

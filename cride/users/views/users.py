@@ -33,7 +33,6 @@ class UserSignUpAPIView(APIView):
 
     def post(self, request, *args, **kwargs):
         """Handle HTTP Post Request"""
-        print('por aca paso')
         serializer = UserSignUpSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
