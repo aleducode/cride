@@ -17,12 +17,12 @@ class Membership(CRideModel):
     user = models.ForeignKey('users.User', on_delete=models.CASCADE)
     circle = models.ForeignKey('circles.Circle', on_delete=models.CASCADE)
 
-    is_public = models.BooleanField(
+    is_admin = models.BooleanField(
         default=True,
         help_text='circle admins can update the circles data and manage its members.'
     )
     used_invitations = models.PositiveSmallIntegerField(default=0)
-    remaining_invitation = models.PositiveSmallIntegerField(default=0)
+    remaining_invitations = models.PositiveSmallIntegerField(default=0)
     invited_by = models.ForeignKey(
         'users.User',
         null=True,
