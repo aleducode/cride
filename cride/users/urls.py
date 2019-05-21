@@ -1,14 +1,17 @@
 """Urls urls."""
 
 # Django
-from django.urls import path
+from django.urls import include, path
+
+# Django Rest Frameworl
+from rest_framework.routers import DefaultRouter
 
 # Views
-from cride.users.views import UserLoginAPIView, UserSignUpAPIView, AccountVerificationAPIView
+from .views import users as user_views
 
+router = DefaultRouter()
+router.register(r'users', user_views.UserViewSet, basename='users')
 
 urlpatterns = [
-    path('login/', UserLoginAPIView.as_view(), name='login'),
-    path('signup/', UserSignUpAPIView.as_view(), name='signup'),
-    path('verify/', AccountVerificationAPIView.as_view(), name='verify'),
+    path('', include(router.urls))
 ]
