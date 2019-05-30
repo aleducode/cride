@@ -6,13 +6,19 @@ from django.utils import timezone
 from django.template.loader import render_to_string
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
+
 # Django Rest Framework
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from django.core.validators import RegexValidator
 from rest_framework.authtoken.models import Token
+
 # Model
 from cride.users.models import User, Profile
+
+# Serializer
+from cride.users.serializers.profiles import ProfileModelSerializer
+
 # Utilities
 from datetime import timedelta
 import jwt
@@ -21,13 +27,17 @@ import jwt
 class UserModelSerializaer(serializers.ModelSerializer):
     """User model serializer"""
 
+    profile = ProfileModelSerializer(read_only=True)
+
     class Meta:
         model = User
         fields = (
             'username',
             'first_name',
             'last_name',
-            'email'
+            'email',
+            'phone_number',
+            'profile'
         )
 
 

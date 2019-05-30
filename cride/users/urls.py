@@ -1,4 +1,4 @@
-"""Urls urls."""
+"""Users urls."""
 
 # Django
 from django.urls import include, path

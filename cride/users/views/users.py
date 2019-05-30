@@ -12,7 +12,8 @@ from cride.users.serializers import (
     UserLoginSerializer,
     UserModelSerializaer,
     UserSignUpSerializer,
-    AccountVerificationSerializer)
+    AccountVerificationSerializer,
+    ProfileModelSerializer)
 
 # Models
 from cride.users.models import User
@@ -28,6 +29,7 @@ from cride.users.permissions import IsAccountOwner
 
 # TODO: documentate @actionr replace to old methods
 class UserViewSet(mixins.RetrieveModelMixin,
+                  mixins.UpdateModelMixin,
                   viewsets.GenericViewSet):
     """User view set.
 
@@ -42,7 +44,7 @@ class UserViewSet(mixins.RetrieveModelMixin,
         """Assign permission based on action"""
         if self.action in ['signup', 'login', 'verify']:
             permissions = [AllowAny]
-        elif self.action == 'retrieve':
+        elif self.action == ['retrieve', 'update', 'partial_update']:
             permissions = [IsAuthenticated, IsAccountOwner]
         else:
             permissions = [IsAuthenticated]
@@ -77,6 +79,22 @@ class UserViewSet(mixins.RetrieveModelMixin,
         user = serializer.save()
         data = {'message': 'Congratulations, now go share some rides!'}
         return Response(data, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['put', 'patch'])
+    def profile(self, request, *args, **kwargs):
+        """Account verification"""
+        user = self.get_object()
+        profile = user.profile
+        partial = request.method == 'PATCH'
+        serializer = ProfileModelSerializer(
+            profile,
+            data=request.data,
+            partial=partial
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        data = UserModelSerializaer(user).data
+        return Response(data)
 
     def retrieve(self, request, *args, **kwargs):
         """Add extra data."""
