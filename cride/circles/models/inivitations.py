@@ -1,6 +1,6 @@
 """Circle invitations models."""
 
-# Django 
+# Django
 from django.db import models
 
 # Utilities
@@ -18,16 +18,17 @@ class Invitation(CRideModel):
     members of the cirle and have a 'remaining_invitations'
     value greaer than 0."""
 
-    code = models.CharField(max_lenght=50, unique=True)
+    code = models.CharField(max_length=50, unique=True)
 
     issued_by = models.ForeignKey(
         'users.User',
-        on_delete=models.CASCASDE,
-        help_text='Cride member that is providing the invitation.'
+        on_delete=models.CASCADE,
+        help_text='Cride member that is providing the invitation.',
+        related_name='issued_by',
     )
     used_by = models.ForeignKey(
         'users.User',
-        on_delete=models.CASCASDE,
+        on_delete=models.CASCADE,
         null=True,
         help_text='User tht used the code to enter the circle.'
 
@@ -36,6 +37,8 @@ class Invitation(CRideModel):
 
     used = models.BooleanField(default=False)
     used_at = models.DateTimeField(blank=True, null=True)
+
+    objects = InvitationManager()
 
     def __str__(self):
         """return code and circle"""

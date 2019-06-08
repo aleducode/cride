@@ -5,12 +5,12 @@ from django.db import models
 
 # Utilities
 import random
-from string import ascii_uppercase
+from string import ascii_uppercase, digits
 
 
 class InvitationManager(models.Manager):
     """Invitation manager.
-    
+
     Used to handle code creation.
     """
     CODE_LENGTH = 10
