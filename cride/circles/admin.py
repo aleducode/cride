@@ -1,15 +1,16 @@
 """Circles admmin"""
-#Django
+# Django
 from django.contrib import admin
 
-#Model
-from cride.circles.models import Circle
+# Model
+from cride.circles.models import Circle, Invitation
+
 
 @admin.register(Circle)
 class CircleAdmin(admin.ModelAdmin):
     """Circle admin"""
 
-    list_display=(
+    list_display = (
         'slug_name',
         'name',
         'is_public',
@@ -17,8 +18,8 @@ class CircleAdmin(admin.ModelAdmin):
         'is_limited',
         'members_limit'
     )
-    search_fields=('slug_name','name')
-    list_filter=(
+    search_fields = ('slug_name', 'name')
+    list_filter = (
         'is_public',
         'verified',
         'is_limited',

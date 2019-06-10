@@ -42,4 +42,4 @@ class Membership(CRideModel):
 
     def __str__(self):
         """Return username and circle"""
-        return '@{} at #'.format(self.user.username, self.circle.slug_name)
+        return '@{} at #{}'.format(self.user.username, self.circle.slug_name)
