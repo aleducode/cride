@@ -2,9 +2,11 @@
 # Django Rest Framework
 from rest_framework import mixins, viewsets
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.Filters import SearcFilter, OrderingFilter
 
 # Permissions
 from cride.circles.permissions.circles import IsCircleAdmin
+
 # Serializer
 from cride.circles.serializers import CircleModelSerializer
 
@@ -22,6 +24,10 @@ class CirclesViewset(mixins.CreateModelMixin,
 
     serializer_class = CircleModelSerializer
     lookup_field = 'slug_name'
+
+    # Filters
+    filter_backends = (SearcFilter, OrderingFilter)
+    search_fields =['slugname, name']
 
     def get_queryset(self):
         """Restrict list to public-only"""

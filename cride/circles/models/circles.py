@@ -11,7 +11,7 @@ class Circle(CRideModel):
     """circle model
     A circle is a private group where rides are offered and taken
     by its members. To join a circle a user must be receive an unique
-    invitation code from an existing mcircle member
+    invitation code from an existing circle member
     """
 
     name = models.CharField('circle name', max_length=140)

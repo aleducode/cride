@@ -80,14 +80,16 @@ class MembershipViewSet(mixins.ListModelMixin,
             issued_by=request.user,
             used=False
         ).values_list('code')
-        #  invitations to
+        #  number of invitations available to create
         diff = member.remaining_invitations - len(unused_invitations)
         invitations = [x[0] for x in unused_invitations]
         for i in range(0, diff):
+            invitations.append(
             Invitation.objects.create(
                 issued_by=request.user,
                 circle=self.circle
             ).code
+            )
 
         data = {
             'used_invitations': MembershipModelSerializer(invited_members, many=True).data,
