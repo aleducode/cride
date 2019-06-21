@@ -1,33 +1,39 @@
-"""Circles View"""
-# Django Rest Framework
+"""Circle views."""
+
+# Django REST Framework
 from rest_framework import mixins, viewsets
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.Filters import SearcFilter, OrderingFilter
 
 # Permissions
+from rest_framework.permissions import IsAuthenticated
 from cride.circles.permissions.circles import IsCircleAdmin
 
-# Serializer
+# Filters
+from rest_framework.filters import SearchFilter, OrderingFilter
+from django_filters.rest_framework import DjangoFilterBackend
+
+# Serializers
 from cride.circles.serializers import CircleModelSerializer
 
 # Models
 from cride.circles.models import Circle, Membership
 
 
-class CirclesViewset(mixins.CreateModelMixin,
-                     mixins.RetrieveModelMixin,
-                     mixins.UpdateModelMixin,
-                     mixins.DestroyModelMixin,
-                     mixins.ListModelMixin,
-                     viewsets.GenericViewSet):
-    """Circle view set"""
+class CircleViewSet(mixins.CreateModelMixin,
+                    mixins.RetrieveModelMixin,
+                    mixins.UpdateModelMixin,
+                    mixins.ListModelMixin,
+                    viewsets.GenericViewSet):
+    """Circle view set."""
 
     serializer_class = CircleModelSerializer
     lookup_field = 'slug_name'
 
     # Filters
-    filter_backends = (SearcFilter, OrderingFilter)
-    search_fields =['slugname, name']
+    filter_backends = (SearchFilter, OrderingFilter, DjangoFilterBackend)
+    search_fields = ('slug_name', 'name')
+    ordering_fields = ('rides_offered', 'rides_taken', 'name', 'created', 'member_limit')
+    ordering = ('-members__count', '-rides_offered', '-rides_taken')
+    filter_fields = ('verified', 'is_limited')
 
     def get_queryset(self):
         """Restrict list to public-only"""
@@ -53,4 +59,3 @@ class CirclesViewset(mixins.CreateModelMixin,
         if self.action in ['update', 'partial_update']:
             permissions.append(IsCircleAdmin)
         return [permision() for permision in permissions]
-
