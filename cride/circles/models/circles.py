@@ -1,9 +1,9 @@
 """Circle model"""
 
-#Django
+# Django
 from django.db import models
 
-#Utilities
+# Utilities
 from cride.utils.models import CRideModel
 
 
