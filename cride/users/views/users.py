@@ -10,7 +10,7 @@ from rest_framework.response import Response
 from cride.circles.serializers import CircleModelSerializer
 from cride.users.serializers import (
     UserLoginSerializer,
-    UserModelSerializaer,
+    UserModelSerializer,
     UserSignUpSerializer,
     AccountVerificationSerializer,
     ProfileModelSerializer)
@@ -37,7 +37,7 @@ class UserViewSet(mixins.RetrieveModelMixin,
     """
 
     queryset = User.objects.filter(is_active=True, is_client=True)
-    serializer_class = UserModelSerializaer
+    serializer_class = UserModelSerializer
     lookup_field = 'username'
 
     def get_permissions(self):
@@ -57,7 +57,7 @@ class UserViewSet(mixins.RetrieveModelMixin,
         serializer.is_valid(raise_exception=True)
         user, token = serializer.save()
         data = {
-            'user': UserModelSerializaer(user).data,
+            'user': UserModelSerializer(user).data,
             'access_token': token
         }
         return Response(data, status=status.HTTP_201_CREATED)
@@ -68,7 +68,7 @@ class UserViewSet(mixins.RetrieveModelMixin,
         serializer = UserSignUpSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
-        data = UserModelSerializaer(user).data
+        data = UserModelSerializer(user).data
         return Response(data, status=status.HTTP_201_CREATED)
 
     @action(detail=False, methods=['post'])
@@ -93,7 +93,7 @@ class UserViewSet(mixins.RetrieveModelMixin,
         )
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        data = UserModelSerializaer(user).data
+        data = UserModelSerializer(user).data
         return Response(data)
 
     def retrieve(self, request, *args, **kwargs):

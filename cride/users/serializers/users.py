@@ -24,7 +24,7 @@ from datetime import timedelta
 import jwt
 
 
-class UserModelSerializaer(serializers.ModelSerializer):
+class UserModelSerializer(serializers.ModelSerializer):
     """User model serializer"""
 
     profile = ProfileModelSerializer(read_only=True)

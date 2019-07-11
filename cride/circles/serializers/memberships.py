@@ -10,14 +10,14 @@ from rest_framework import serializers
 from cride.circles.models import Membership, Invitation
 
 # Serializer
-from cride.users.serializers import UserModelSerializaer
+from cride.users.serializers import UserModelSerializer
 
 
 class MembershipModelSerializer(serializers.ModelSerializer):
     """Membership model Serializer"""
 
     joined_at = serializers.DateTimeField(source='created', read_only=True)
-    user = UserModelSerializaer(read_only=True)
+    user = UserModelSerializer(read_only=True)
     invited_by = serializers.StringRelatedField()
 
     class Meta:
