@@ -163,10 +163,23 @@ class JoinRideSerializer(serializers.ModelSerializer):
         member.save()
 
         # Cirlce
-        circle.rides_taken =+ 1
+        circle.rides_taken += 1
         circle.save()
 
         return ride
 
 
+class EndRideSerializer(serializers.ModelSerializer):
+    """End ride serializer."""
+    current_time = serializers.DateTimeField()
 
+    class Meta:
+        model = Ride
+        fields = ('is_active', 'current_time')
+
+    def validate_current_time(self, data):
+        """Verify ride have indeed started."""
+        ride = self.context['view'].get_object()
+        if data <= ride.departure_date:
+            raise serializers.ValidationError("Ride has not started yet.")
+        return data
