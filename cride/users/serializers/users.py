@@ -2,10 +2,7 @@
 
 # Django
 from django.contrib.auth import password_validation, authenticate
-from django.utils import timezone
-from django.template.loader import render_to_string
 from django.conf import settings
-from django.core.mail import EmailMultiAlternatives
 
 # Django Rest Framework
 from rest_framework import serializers
@@ -16,20 +13,21 @@ from rest_framework.authtoken.models import Token
 # Model
 from cride.users.models import User, Profile
 
+# Tasks
+from cride.taskapp.tasks import send_confirmation_email
+
 # Serializer
 from cride.users.serializers.profiles import ProfileModelSerializer
 
-# Utilities
-from datetime import timedelta
-import jwt
-
 
 class UserModelSerializer(serializers.ModelSerializer):
-    """User model serializer"""
+    """User model serializer."""
 
     profile = ProfileModelSerializer(read_only=True)
 
     class Meta:
+        """Meta serializer."""
+
         model = User
         fields = (
             'username',
@@ -72,7 +70,7 @@ class UserSignUpSerializer(serializers.Serializer):
     last_name = serializers.CharField(min_length=1)
 
     def validate(self, data):
-        """Verify password match"""
+        """Verify password match."""
         passwd = data.get('password')
         passwd_conf = data.get('password_confirmation')
         if passwd != passwd_conf:
@@ -81,36 +79,11 @@ class UserSignUpSerializer(serializers.Serializer):
         return data
 
     def create(self, data):
-        """Handle user and profile creation"""
+        """Handle user and profile creation."""
         data.pop('password_confirmation')
         user = User.objects.create_user(**data, is_verified=False, is_client=True)
-        profile = Profile.objects.create(user=user)
-        self.send_confirmation_email(user)
+        send_confirmation_email.delay(user.pk)
         return user
-
-    def send_confirmation_email(self, user):
-        """Send verification link to given user"""
-        verification_token = self.gen_verification_token(user)
-        subject = 'Welcome @{}! Verify your account to start using comparte Ride.'.format(user.username)
-        from_email = 'Comparte Ride <noreply@comparteride.com>'
-        content = render_to_string(
-            'email/users/account_verification.html',
-            {'token': verification_token, 'user': user})
-        msg = EmailMultiAlternatives(subject, content, from_email, [user.email])
-        msg.attach_alternative(content, "text/html")
-        msg.send()
-
-    def gen_verification_token(self, user):
-        """Create JWT token that the user can use to verify its account"""
-        expiration_date = timezone.now() + timedelta(days=3)
-        payload = {
-            'user': user.username,
-            # UTC format
-            'exp': int(expiration_date.timestamp()),
-            'type': 'email_confirmation'
-        }
-        token = jwt.encode(payload, settings.SECRET_KEY, algorithm='HS256')
-        return token.decode()
 
 
 class UserLoginSerializer(serializers.Serializer):
