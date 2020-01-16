@@ -9,7 +9,7 @@ from cride.utils.models import CRideModel
 
 
 class User(CRideModel, AbstractUser):
-    """ User model.
+    """User model.
     Extend from Django abstract user, change the username field to email
     and add some extra info
     """

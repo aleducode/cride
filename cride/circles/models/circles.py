@@ -8,7 +8,7 @@ from cride.utils.models import CRideModel
 
 
 class Circle(CRideModel):
-    """circle model
+    """Circle model
     A circle is a private group where rides are offered and taken
     by its members. To join a circle a user must be receive an unique
     invitation code from an existing circle member
@@ -23,7 +23,7 @@ class Circle(CRideModel):
     members = models.ManyToManyField(
         'users.User', through='circles.Membership',
         through_fields=('circle', 'user')
-        )
+    )
 
     # stats
     rides_offered = models.PositiveIntegerField(default=0)
@@ -52,7 +52,7 @@ class Circle(CRideModel):
     )
 
     def __str__(self):
-        """Return circles name"""
+        """Return circles name."""
         return self.name
 
     # override class meta from Cridemodel

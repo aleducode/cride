@@ -5,7 +5,7 @@ Pillow==6.2.0
 psycopg2==2.7.4 --no-binary psycopg2
 
 # Django
-django==2.0.9
+django>=2.0.11
 
 # Django Rest Framework
 djangorestframework==3.9.1

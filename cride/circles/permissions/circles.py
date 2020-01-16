@@ -1,4 +1,4 @@
-"""Circles permissions classes"""
+"""Circles permissions classes."""
 
 # Django Rest Framework
 from rest_framework.permissions import BasePermission
@@ -11,7 +11,7 @@ class IsCircleAdmin(BasePermission):
     """Allow access only to circle admin."""
 
     def has_object_permission(self, request, view, obj):
-        """Verify has a membership in the obj"""
+        """Verify has a membership in the obj."""
         try:
             Membership.objects.get(
                 user=request.user,

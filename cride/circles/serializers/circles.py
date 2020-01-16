@@ -1,4 +1,4 @@
-"""Circles Serializers"""
+"""Circles Serializers."""
 
 # Django Rest Framework
 from rest_framework import serializers
@@ -8,7 +8,7 @@ from cride.circles.models import Circle
 
 
 class CircleModelSerializer(serializers.ModelSerializer):
-    """Circle model Serializer"""
+    """Circle model Serializer."""
 
     members_limit = serializers.IntegerField(
         required=False,
@@ -35,13 +35,9 @@ class CircleModelSerializer(serializers.ModelSerializer):
         )
 
     def validate(self, data):
-        """Ensure both members_limit and is_limited are present"""
+        """Ensure both members_limit and is_limited are present."""
         members_limit = data.get('members_limit', None)
         is_limited = data.get('is_limited', False)
         if is_limited ^ bool(members_limit):
             raise serializers.ValidationError('If circle is limited, a member limit must be provided')
         return data
-
-
-
-
