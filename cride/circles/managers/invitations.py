@@ -1,4 +1,4 @@
-"""Circle invitation manager"""
+"""Circle invitation manager."""
 
 # Django
 from django.db import models
@@ -13,6 +13,7 @@ class InvitationManager(models.Manager):
 
     Used to handle code creation.
     """
+
     CODE_LENGTH = 10
 
     def create(self, **kwargs):

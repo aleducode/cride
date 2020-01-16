@@ -1,4 +1,4 @@
-"""Circles admmin"""
+"""Circles admin."""
 # Django
 from django.contrib import admin
 from django.utils import timezone
@@ -15,7 +15,7 @@ from datetime import datetime, timedelta
 
 @admin.register(Circle)
 class CircleAdmin(admin.ModelAdmin):
-    """Circle admin"""
+    """Circle admin."""
 
     list_display = (
         'slug_name',
@@ -31,7 +31,7 @@ class CircleAdmin(admin.ModelAdmin):
         'verified',
         'is_limited',
     )
-    actions = ['make_verified', 'make_unverified','download_todays_rides']
+    actions = ['make_verified', 'make_unverified', 'download_todays_rides']
 
     def make_verified(self, request, queryset):
         """Make circles verified."""

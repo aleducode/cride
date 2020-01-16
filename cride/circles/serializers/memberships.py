@@ -1,4 +1,4 @@
-"""Membership serializer"""
+"""Membership serializer."""
 
 # Django
 from django.utils import timezone
@@ -14,7 +14,7 @@ from cride.users.serializers import UserModelSerializer
 
 
 class MembershipModelSerializer(serializers.ModelSerializer):
-    """Membership model Serializer"""
+    """Membership model Serializer."""
 
     joined_at = serializers.DateTimeField(source='created', read_only=True)
     user = UserModelSerializer(read_only=True)
@@ -40,6 +40,7 @@ class MembershipModelSerializer(serializers.ModelSerializer):
 
 class AddMemberSerializer(serializers.Serializer):
     """Add member serializer.
+
     Handle the addition of a new member to a circle.
     Circle object must be provided in the context.
     """
@@ -104,4 +105,3 @@ class AddMemberSerializer(serializers.Serializer):
         issuer.save()
 
         return member
-

@@ -17,13 +17,14 @@ from django.utils import timezone
 
 
 class RideModelSerializer(serializers.ModelSerializer):
-    """Ride model serializer"""
+    """Ride model serializer."""
     offered_by = UserModelSerializer(read_only=True)
     offered_in = serializers.StringRelatedField()
     passengers = UserModelSerializer(read_only=True, many=True)
 
     class Meta:
-        """Meta class"""
+        """Meta class."""
+
         model = Ride
         fields = '__all__'
         read_only_fields = (
@@ -36,7 +37,7 @@ class RideModelSerializer(serializers.ModelSerializer):
         """Allow update only before departure date."""
         now = timezone.now()
         if instance.departure_date <= now:
-            raise serializer.ValidationError('Ongoing rides cannot be modified.')
+            raise serializers.ValidationError('Ongoing rides cannot be modified.')
         return super(RideModelSerializer, self).update(instance, data)
 
 
@@ -47,13 +48,13 @@ class CreateRideSerializer(serializers.ModelSerializer):
     available_seats = serializers.IntegerField(min_value=1, max_value=15)
 
     class Meta:
-        """Meta class"""
+        """Meta class."""
 
         model = Ride
         exclude = ('offered_in', 'passengers', 'rating', 'is_active')
 
     def validate_departure_date(self, data):
-        """Validate date is not in the pass"""
+        """Validate date is not in the pass."""
         min_date = timezone.now() + timedelta(minutes=10)
         if data < min_date:
             raise serializers.ValidationError(
@@ -81,7 +82,7 @@ class CreateRideSerializer(serializers.ModelSerializer):
         return data
 
     def create(self, data):
-        """Upgrade ride and stats"""
+        """Upgrade ride and stats."""
         circle = self.context['circle']
         ride = Ride.objects.create(**data, offered_in=circle)
 

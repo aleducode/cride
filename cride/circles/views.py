@@ -1,6 +1,5 @@
-"""Circles Views"""
-# django
-from django.http import JsonResponse
+"""Circles Views."""
+
 # RestFramework
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -25,7 +24,7 @@ def import_csv(request):
 
 @api_view(['GET'])
 def list_circles(request):
-    """list manual api example"""
+    """list manual api example."""
     circles = Circle.objects.filter(is_public=True)
     serializers = CircleSerializer(circles, many=True)
     return Response(serializers.data)
@@ -33,7 +32,7 @@ def list_circles(request):
 
 @api_view(['POST'])
 def create_circle(request):
-    """Create circle"""
+    """Create circle."""
     serializer = CreateCircleSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
     circle = serializer.save()

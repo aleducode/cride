@@ -9,6 +9,7 @@ from cride.utils.models import CRideModel
 
 class Rating(CRideModel):
     """Ride rating.
+
     Rates are entities that store the rating a user
     gave to a ride, it ranges from 1 to 5 and it affects
     the ride offerer's overall reputation.

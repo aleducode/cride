@@ -1,4 +1,4 @@
-"""Membership model"""
+"""Membership model."""
 
 # Django
 from django.db import models
@@ -8,7 +8,7 @@ from cride.utils.models import CRideModel
 
 
 class Membership(CRideModel):
-    """Membership model
+    """Membership model.
 
     is the table thats holds the relationship
     between a user and a circle.
@@ -41,5 +41,5 @@ class Membership(CRideModel):
     )
 
     def __str__(self):
-        """Return username and circle"""
+        """Return username and circle."""
         return '@{} at #{}'.format(self.user.username, self.circle.slug_name)
